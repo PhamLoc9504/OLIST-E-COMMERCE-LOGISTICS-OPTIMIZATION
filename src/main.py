@@ -40,9 +40,15 @@ STATE_TO_REGION = {
 @st.cache_data(show_spinner=False)
 def load_data():
     try:
-        engine = create_engine("postgresql://olist_user:olist_password@localhost:5432/olist_db")
+        if "DB_URL" in st.secrets:
+            db_url = st.secrets["DB_URL"]
+        else:
+            db_url = "postgresql://olist_user:olist_password@localhost:5432/olist_db"
+            
+        engine = create_engine(db_url)
         return pd.read_sql("SELECT * FROM public.gold_kpi_by_state", engine)
-    except:
+    except Exception as e:
+        st.error(f"Lỗi kết nối Data: {e}")
         return pd.DataFrame()
 
 df = load_data()
