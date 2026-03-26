@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olist · Logistics Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f1f5fb;
+  --panel:#fff;
+  --border:#e0e7ef;
+  --text:#0f172a;
+  --muted:#64748b;
+  --teal:#0d9488;
+  --teal-light:#e6faf7;
+  --amber:#d97706;
+  --red:#dc2626;
+  --blue:#2563eb;
+  --orange:#ea580c;
+  --mono:'IBM Plex Mono',monospace;
+  --body:'Plus Jakarta Sans',sans-serif;
+}
+body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:100vh;font-size:13px}
+ 
+/* ── TOPBAR ── */
+.topbar{
+  background:var(--panel);
+  border-bottom:1px solid var(--border);
+  padding:0 20px;
+  display:flex;align-items:center;gap:0;
+  height:48px;flex-shrink:0;
+}
+.topbar-brand{
+  display:flex;align-items:center;gap:8px;
+  padding-right:20px;border-right:1px solid var(--border);margin-right:20px;
+}
+.brand-icon{
+  width:28px;height:28px;background:var(--teal);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:#fff;flex-shrink:0;
+}
+.brand-name{font-weight:700;font-size:14px;color:var(--text);white-space:nowrap}
+.brand-sub{font-family:var(--mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.topbar-title{font-weight:700;font-size:16px;color:var(--text);flex:1}
+.topbar-meta{font-family:var(--mono);font-size:10px;color:var(--muted);text-align:right;line-height:1.5}
+.live-dot{display:inline-block;width:6px;height:6px;background:#16a34a;border-radius:50%;margin-right:4px;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+ 
+/* ── FILTER BAR ── */
+.filterbar{
+  background:var(--panel);border-bottom:1px solid var(--border);
+  padding:8px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.filterbar label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.8px}
+select,input[type=range]{
+  border:1px solid var(--border);border-radius:6px;padding:4px 10px;
+  font-family:var(--body);font-size:12px;background:#fff;color:var(--text);
+  cursor:pointer;outline:none;
+}
+select:focus,select:hover{border-color:var(--teal)}
+.filter-group{display:flex;align-items:center;gap:6px}
+.filter-sep{width:1px;height:24px;background:var(--border)}
+.range-val{font-family:var(--mono);font-size:11px;color:var(--text);min-width:40px}
+.tip-tag{
+  background:#fef9c3;color:#854d0e;border:1px solid #fde68a;
+  border-radius:4px;padding:2px 8px;font-size:11px;font-family:var(--mono);
+}
+ 
+/* ── MAIN LAYOUT ── */
+.main{display:flex;height:calc(100vh - 48px - 44px);overflow:hidden}
+ 
+/* ── MAP ── */
+.map-panel{flex:0 0 400px;position:relative;border-right:1px solid var(--border)}
+#map{width:100%;height:100%}
+.map-legend{
+  position:absolute;bottom:16px;left:12px;z-index:999;
+  background:rgba(255,255,255,.92);border:1px solid var(--border);
+  border-radius:8px;padding:10px 14px;
+}
+.map-legend-title{font-weight:700;font-size:11px;color:var(--text);margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px}
+.legend-row{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-bottom:3px}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+ 
+/* ── RIGHT PANEL ── */
+.right-panel{flex:1;display:flex;flex-direction:column;overflow:hidden}
+ 
+/* ── KPI ROW ── */
+.kpi-row{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.kpi-card{
+  padding:14px 18px;border-right:1px solid var(--border);
+  position:relative;transition:background .15s;
+}
+.kpi-card:last-child{border-right:none}
+.kpi-card:hover{background:#f8fbff}
+.kpi-eyebrow{
+  font-family:var(--mono);font-size:9px;text-transform:uppercase;
+  letter-spacing:1.5px;color:var(--muted);margin-bottom:6px;
+}
+.kpi-val{font-family:var(--mono);font-size:24px;font-weight:700;color:var(--text);line-height:1}
+.kpi-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.kpi-delta{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  padding:1px 6px;border-radius:4px;display:inline-block;margin-top:4px;
+}
+.delta-pos{background:#dcfce7;color:#166534}
+.delta-neg{background:#fee2e2;color:#991b1b}
+.kpi-accent{position:absolute;top:0;left:0;width:3px;height:100%;background:var(--teal);border-radius:0}
+ 
+/* ── CHARTS AREA ── */
+.charts-area{flex:1;display:grid;grid-template-columns:1.6fr 1fr;overflow:hidden}
+.chart-panel{border-right:1px solid var(--border);padding:14px 16px;overflow:hidden;display:flex;flex-direction:column}
+.chart-panel:last-child{border-right:none}
+.chart-header{margin-bottom:10px;flex-shrink:0}
+.chart-title{font-weight:700;font-size:13px;color:var(--text)}
+.chart-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.chart-wrap{flex:1;position:relative;min-height:0}
+ 
+/* ── TABLE PANEL ── */
+.table-panel{
+  border-top:1px solid var(--border);
+  overflow-x:auto;overflow-y:auto;
+  max-height:180px;flex-shrink:0;
+}
+table{width:100%;border-collapse:collapse;font-size:11px}
+thead th{
+  background:var(--bg);border-bottom:1px solid var(--border);
+  padding:6px 12px;text-align:left;font-weight:700;font-size:10px;
+  text-transform:uppercase;letter-spacing:.8px;color:var(--muted);
+  white-space:nowrap;position:sticky;top:0;z-index:10;
+}
+tbody tr{border-bottom:1px solid #f1f5fb;cursor:pointer;transition:background .1s}
+tbody tr:hover{background:#f0f9ff}
+tbody td{padding:6px 12px;color:var(--text);white-space:nowrap}
+.td-state{font-weight:700;color:var(--teal)}
+.td-num{font-family:var(--mono);font-size:11px}
+.badge{
+  display:inline-block;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:600;
+  font-family:var(--mono);
+}
+.badge-green{background:#dcfce7;color:#166534}
+.badge-amber{background:#fef3c7;color:#92400e}
+.badge-red{background:#fee2e2;color:#991b1b}
+.heatbar{
+  display:inline-block;height:8px;border-radius:3px;background:var(--teal);
+  opacity:.7;transition:width .3s;
+}
+ 
+/* ── TOOLTIP ── */
+.leaflet-popup-content-wrapper{
+  border-radius:8px!important;
+  box-shadow:0 4px 16px rgba(0,0,0,.12)!important;
+}
+.map-tooltip{font-family:var(--body);font-size:12px;min-width:160px}
+.map-tooltip-title{font-weight:700;font-size:13px;color:var(--text);margin-bottom:6px}
+.map-tooltip-row{display:flex;justify-content:space-between;gap:16px;margin-bottom:2px}
+.map-tooltip-label{color:var(--muted)}
+.map-tooltip-val{font-family:var(--mono);font-weight:600;color:var(--text)}
+</style>
+</head>
+<body>
+ 
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="brand-icon">🚚</div>
+    <div>
+      <div class="brand-name">Olist Logistics</div>
+      <div class="brand-sub">Intelligence</div>
+    </div>
+  </div>
+  <div class="topbar-title">Brazil Delivery Performance Dashboard</div>
+  <div class="topbar-meta">
+    <span class="live-dot"></span>gold_kpi_by_state · dbt + Airflow<br>
+    Refreshed <span id="refreshed"></span>
+  </div>
+</div>
+ 
+<!-- FILTER BAR -->
+<div class="filterbar">
+  <span class="tip-tag">Tip: Click a state on the map to filter</span>
+  <div class="filter-sep"></div>
+  <div class="filter-group">
+    <label>Region</label>
+    <select id="fRegion" onchange="applyFilters()">
+      <option value="all">All Regions</option>
+      <option value="SE">Southeast</option>
+      <option value="S">South</option>
+      <option value="NE">Northeast</option>
+      <option value="N">North</option>
+      <option value="CW">Center-West</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label>OTD ≥</label>
+    <input type="range" id="fOtd" min="0" max="100" value="0" step="5" oninput="document.getElementById('otdVal').textContent=this.value+'%';applyFilters()">
+    <span class="range-val" id="otdVal">0%</span>
+  </div>
+  <div class="filter-group">
+    <label>Sort by</label>
+    <select id="fSort" onchange="applyFilters()">
+      <option value="orders">Total Orders ↓</option>
+      <option value="otd">OTD Rate ↓</option>
+      <option value="time">Delivery Time ↑</option>
+      <option value="freight">Freight Cost ↓</option>
+    </select>
+  </div>
+  <button onclick="resetFilters()" style="margin-left:auto;padding:4px 12px;border-radius:6px;border:1px solid var(--border);background:#fff;font-size:11px;cursor:pointer;color:var(--muted)">↺ Reset</button>
+</div>
+ 
+<!-- MAIN -->
+<div class="main">
+ 
+  <!-- MAP -->
+  <div class="map-panel">
+    <div id="map"></div>
+    <div class="map-legend">
+      <div class="map-legend-title">Order Volume</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#fdba74;width:6px;height:6px"></div>&lt; 2,000</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#f97316;width:9px;height:9px"></div>2K – 10K</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#ea580c;width:12px;height:12px"></div>10K – 20K</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#9a3412;width:16px;height:16px"></div>> 20K</div>
+    </div>
+  </div>
+ 
+  <!-- RIGHT -->
+  <div class="right-panel">
+ 
+    <!-- KPI ROW -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-accent"></div>
+        <div class="kpi-eyebrow">Total Orders</div>
+        <div class="kpi-val" id="kpiOrders">—</div>
+        <div class="kpi-sub" id="kpiStates">— states</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-accent" style="background:var(--blue)"></div>
+        <div class="kpi-eyebrow">OTD Rate</div>
+        <div class="kpi-val" id="kpiOtd">—</div>
+        <span class="kpi-delta delta-pos" id="kpiOtdDelta">—</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-accent" style="background:var(--amber)"></div>
+        <div class="kpi-eyebrow">Avg Delivery</div>
+        <div class="kpi-val" id="kpiTime">—</div>
+        <div class="kpi-sub">days (weighted)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-accent" style="background:var(--orange)"></div>
+        <div class="kpi-eyebrow">Avg Freight</div>
+        <div class="kpi-val" id="kpiFreight">—</div>
+        <div class="kpi-sub">BRL (weighted)</div>
+      </div>
+    </div>
+ 
+    <!-- CHARTS AREA -->
+    <div class="charts-area">
+ 
+      <!-- OTD BAR -->
+      <div class="chart-panel">
+        <div class="chart-header">
+          <div class="chart-title">On-Time Delivery Rate by State</div>
+          <div class="chart-sub">Horizontal bar · color = performance tier · dashed line = 90% target</div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="otdChart"></canvas>
+        </div>
+      </div>
+ 
+      <!-- FREIGHT BAR -->
+      <div class="chart-panel">
+        <div class="chart-header">
+          <div class="chart-title">Avg Freight Cost — Top 10</div>
+          <div class="chart-sub">Average shipping cost (BRL) per order</div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="freightChart"></canvas>
+        </div>
+      </div>
+ 
+    </div>
+ 
+    <!-- TABLE -->
+    <div class="table-panel">
+      <table>
+        <thead>
+          <tr>
+            <th>State</th>
+            <th>Total Orders</th>
+            <th>OTD Rate</th>
+            <th>Avg Delivery</th>
+            <th>Avg Freight (BRL)</th>
+            <th>Performance</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+ 
+  </div>
+</div>
+ 
+<script>
+// ── DATA ────────────────────────────────────────────────────────────────────
+// __PYTHON_DATA_INJECTION__
+ 
+const REGIONS = {SE:'Southeast',S:'South',NE:'Northeast',N:'North',CW:'Center-West'};
+let filtered = [...RAW];
+let selectedState = null;
+let otdChart = null, freightChart = null;
+let markers = {};
+ 
+// ── DATE ────────────────────────────────────────────────────────────────────
+document.getElementById('refreshed').textContent = new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+ 
+// ── MAP ──────────────────────────────────────────────────────────────────────
+const map = L.map('map',{zoomControl:true,attributionControl:false}).setView([-14,-52],4);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+  attribution:'© CartoDB',maxZoom:19
+}).addTo(map);
+ 
+function dotColor(otd){
+  if(otd>=90) return '#ea580c';
+  if(otd>=85) return '#f97316';
+  if(otd>=80) return '#fb923c';
+  return '#fdba74';
+}
+function dotRadius(orders){
+  if(orders>20000) return 22;
+  if(orders>10000) return 16;
+  if(orders>2000)  return 11;
+  return 7;
+}
+ 
+RAW.forEach(d=>{
+  const r = dotRadius(d.orders);
+  const m = L.circleMarker([d.lat,d.lng],{
+    radius:r,
+    fillColor:dotColor(d.otd),
+    color:'rgba(255,255,255,0.6)',
+    weight:1.5,
+    fillOpacity:0.85
+  }).addTo(map);
+ 
+  m.bindPopup(`
+    <div class="map-tooltip">
+      <div class="map-tooltip-title">${d.state} — ${REGIONS[d.region]}</div>
+      <div class="map-tooltip-row"><span class="map-tooltip-label">Total Orders</span><span class="map-tooltip-val">${d.orders.toLocaleString()}</span></div>
+      <div class="map-tooltip-row"><span class="map-tooltip-label">OTD Rate</span><span class="map-tooltip-val">${d.otd.toFixed(1)}%</span></div>
+      <div class="map-tooltip-row"><span class="map-tooltip-label">Avg Delivery</span><span class="map-tooltip-val">${d.time.toFixed(1)} days</span></div>
+      <div class="map-tooltip-row"><span class="map-tooltip-label">Avg Freight</span><span class="map-tooltip-val">R$ ${d.freight.toFixed(2)}</span></div>
+    </div>
+  `,{maxWidth:200});
+ 
+  m.on('click',()=>{
+    if(selectedState===d.state){
+      selectedState=null;
+      document.getElementById('fRegion').value='all';
+    } else {
+      selectedState=d.state;
+    }
+    applyFilters();
+  });
+ 
+  markers[d.state]=m;
+});
+ 
+// ── CHARTS ───────────────────────────────────────────────────────────────────
+function getOtdColors(vals){
+  return vals.map(v=>v>=90?'#0d9488':v>=85?'#d97706':'#dc2626');
+}
+ 
+function buildOtdChart(data){
+  const sorted=[...data].sort((a,b)=>a.otd-b.otd);
+  const labels=sorted.map(d=>d.state);
+  const vals=sorted.map(d=>d.otd);
+  const colors=getOtdColors(vals);
+  const ctx=document.getElementById('otdChart').getContext('2d');
+  if(otdChart) otdChart.destroy();
+  otdChart=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{
+        data:vals,
+        backgroundColor:colors,
+        borderRadius:3,
+        borderSkipped:false,
+      }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          callbacks:{label:c=>' '+c.raw.toFixed(1)+'%'}
+        },
+        annotation:{} // placeholder
+      },
+      scales:{
+        x:{min:60,max:100,grid:{color:'#f1f5fb'},ticks:{callback:v=>v+'%',font:{size:10},color:'#94a3b8'}},
+        y:{grid:{display:false},ticks:{font:{size:10,weight:'600'},color:'#334155'}}
+      }
+    },
+    plugins:[{
+      id:'targetLine',
+      afterDraw(chart){
+        const {ctx,scales:{x,y}}=chart;
+        const xPos=x.getPixelForValue(90);
+        ctx.save();
+        ctx.setLineDash([4,4]);
+        ctx.strokeStyle='#94a3b8';
+        ctx.lineWidth=1;
+        ctx.beginPath();
+        ctx.moveTo(xPos,y.top);
+        ctx.lineTo(xPos,y.bottom);
+        ctx.stroke();
+        ctx.fillStyle='#94a3b8';
+        ctx.font='10px IBM Plex Mono';
+        ctx.fillText('90%',xPos+3,y.top+12);
+        ctx.restore();
+      }
+    }]
+  });
+}
+ 
+function buildFreightChart(data){
+  const sorted=[...data].sort((a,b)=>b.freight-a.freight).slice(0,10);
+  const labels=sorted.map(d=>d.state);
+  const vals=sorted.map(d=>d.freight);
+  const ctx=document.getElementById('freightChart').getContext('2d');
+  if(freightChart) freightChart.destroy();
+  freightChart=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{
+        data:vals,
+        backgroundColor:vals.map((_,i)=>`rgba(37,99,235,${0.9-i*0.07})`),
+        borderRadius:3,
+        borderSkipped:false,
+      }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:c=>' R$ '+c.raw.toFixed(2)}}
+      },
+      scales:{
+        x:{grid:{color:'#f1f5fb'},ticks:{callback:v=>'R$'+v,font:{size:10},color:'#94a3b8'}},
+        y:{grid:{display:false},ticks:{font:{size:10,weight:'600'},color:'#334155'}}
+      }
+    }
+  });
+}
+ 
+// ── TABLE ────────────────────────────────────────────────────────────────────
+function buildTable(data){
+  const maxOrders=Math.max(...data.map(d=>d.orders));
+  const tbody=document.getElementById('tableBody');
+  tbody.innerHTML='';
+  data.forEach(d=>{
+    let badge,badgeClass;
+    if(d.otd>=90){badge='✓ On Target';badgeClass='badge-green';}
+    else if(d.otd>=85){badge='△ Watch';badgeClass='badge-amber';}
+    else{badge='✕ Below';badgeClass='badge-red';}
+    const barW=Math.round(d.orders/maxOrders*80);
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td class="td-state">${d.state}</td>
+      <td class="td-num">
+        <span class="heatbar" style="width:${barW}px;display:inline-block;vertical-align:middle;margin-right:4px"></span>
+        ${d.orders.toLocaleString()}
+      </td>
+      <td class="td-num">${d.otd.toFixed(1)}%</td>
+      <td class="td-num">${d.time.toFixed(1)} days</td>
+      <td class="td-num">R$ ${d.freight.toFixed(2)}</td>
+      <td><span class="badge ${badgeClass}">${badge}</span></td>
+    `;
+    tr.onclick=()=>{
+      selectedState = selectedState===d.state ? null : d.state;
+      applyFilters();
+    };
+    tbody.appendChild(tr);
+  });
+}
+ 
+// ── KPIs ─────────────────────────────────────────────────────────────────────
+function updateKpis(data){
+  const total=data.reduce((s,d)=>s+d.orders,0);
+  const otd=data.reduce((s,d)=>s+d.orders*d.otd,0)/total;
+  const time=data.reduce((s,d)=>s+d.orders*d.time,0)/total;
+  const freight=data.reduce((s,d)=>s+d.orders*d.freight,0)/total;
+  document.getElementById('kpiOrders').textContent=total.toLocaleString();
+  document.getElementById('kpiStates').textContent=data.length+' states';
+  document.getElementById('kpiOtd').textContent=otd.toFixed(1)+'%';
+  const delta=otd-90;
+  const el=document.getElementById('kpiOtdDelta');
+  el.textContent=(delta>=0?'+':'')+delta.toFixed(1)+'% vs 90% target';
+  el.className='kpi-delta '+(delta>=0?'delta-pos':'delta-neg');
+  document.getElementById('kpiTime').textContent=time.toFixed(1)+'d';
+  document.getElementById('kpiFreight').textContent='R$'+freight.toFixed(1);
+}
+ 
+// ── MAP MARKERS HIGHLIGHT ─────────────────────────────────────────────────────
+function updateMarkers(data){
+  const activeStates=new Set(data.map(d=>d.state));
+  RAW.forEach(d=>{
+    const m=markers[d.state];
+    if(!m) return;
+    if(activeStates.has(d.state)){
+      m.setStyle({fillOpacity:0.85,opacity:1});
+    } else {
+      m.setStyle({fillOpacity:0.15,opacity:0.2});
+    }
+  });
+}
+ 
+// ── FILTER LOGIC ─────────────────────────────────────────────────────────────
+function applyFilters(){
+  const region=document.getElementById('fRegion').value;
+  const minOtd=parseInt(document.getElementById('fOtd').value);
+  const sortBy=document.getElementById('fSort').value;
+ 
+  let data=[...RAW];
+ 
+  if(selectedState){
+    data=data.filter(d=>d.state===selectedState);
+  } else {
+    if(region!=='all') data=data.filter(d=>d.region===region);
+    data=data.filter(d=>d.otd>=minOtd);
+  }
+ 
+  if(sortBy==='orders') data.sort((a,b)=>b.orders-a.orders);
+  else if(sortBy==='otd') data.sort((a,b)=>b.otd-a.otd);
+  else if(sortBy==='time') data.sort((a,b)=>a.time-b.time);
+  else if(sortBy==='freight') data.sort((a,b)=>b.freight-a.freight);
+ 
+  filtered=data;
+  updateKpis(data);
+  buildOtdChart(data);
+  buildFreightChart(data);
+  buildTable(data);
+  updateMarkers(data);
+}
+ 
+function resetFilters(){
+  selectedState=null;
+  document.getElementById('fRegion').value='all';
+  document.getElementById('fOtd').value=0;
+  document.getElementById('otdVal').textContent='0%';
+  document.getElementById('fSort').value='orders';
+  applyFilters();
+}
+ 
+// ── INIT ─────────────────────────────────────────────────────────────────────
+applyFilters();
+</script>
+</body>
+</html>

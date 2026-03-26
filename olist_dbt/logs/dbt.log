@@ -1,0 +1,353 @@
+[0m09:26:01.567877 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000019302491250>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000019302491340>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000193024912B0>]}
+
+
+============================== 09:26:01.577749 | b7eb7a4f-2f43-4ce3-b4eb-8e265b3c3a8b ==============================
+[0m09:26:01.577749 [info ] [MainThread]: Running with dbt=1.11.7
+[0m09:26:01.579635 [debug] [MainThread]: running dbt with arguments {'version_check': 'True', 'no_print': 'None', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'target_path': 'None', 'printer_width': '80', 'write_json': 'True', 'introspect': 'True', 'log_cache_events': 'False', 'empty': 'False', 'cache_selected_only': 'False', 'log_format': 'default', 'debug': 'False', 'fail_fast': 'False', 'profiles_dir': 'E:\\Downloads\\DA\\Olist_Logistics_Project\\olist_dbt', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'partial_parse': 'True', 'indirect_selection': 'eager', 'invocation_command': 'dbt build', 'use_colors': 'True', 'use_experimental_parser': 'False', 'log_path': 'E:\\Downloads\\DA\\Olist_Logistics_Project\\olist_dbt\\logs'}
+[0m09:26:01.866787 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': 'b7eb7a4f-2f43-4ce3-b4eb-8e265b3c3a8b', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000019303821A30>]}
+[0m09:26:01.929334 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': 'b7eb7a4f-2f43-4ce3-b4eb-8e265b3c3a8b', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000019301DBD520>]}
+[0m09:26:01.930938 [info ] [MainThread]: Registered adapter: postgres=1.10.0
+[0m09:26:02.303528 [debug] [MainThread]: checksum: b80718358155fc17c3559352095564dd56ada1cc1a1c0ef2e62c857e71583775, vars: {}, profile: , target: , version: 1.11.7
+[0m09:26:02.306674 [info ] [MainThread]: Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m09:26:02.308566 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'partial_parser', 'label': 'b7eb7a4f-2f43-4ce3-b4eb-8e265b3c3a8b', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000019303988830>]}
+[0m09:26:06.388161 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'load_project', 'label': 'b7eb7a4f-2f43-4ce3-b4eb-8e265b3c3a8b', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000019303C852B0>]}
+[0m09:26:06.450661 [debug] [MainThread]: Wrote artifact WritableManifest to E:\Downloads\DA\Olist_Logistics_Project\olist_dbt\target\manifest.json
+[0m09:26:06.455027 [debug] [MainThread]: Wrote artifact SemanticManifest to E:\Downloads\DA\Olist_Logistics_Project\olist_dbt\target\semantic_manifest.json
+[0m09:26:06.563972 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': 'b7eb7a4f-2f43-4ce3-b4eb-8e265b3c3a8b', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000019303E44B90>]}
+[0m09:26:06.564491 [info ] [MainThread]: Found 4 models, 4 sources, 464 macros
+[0m09:26:06.566986 [info ] [MainThread]: 
+[0m09:26:06.567703 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
+[0m09:26:06.567703 [info ] [MainThread]: 
+[0m09:26:06.568713 [debug] [MainThread]: Acquiring new postgres connection 'master'
+[0m09:26:06.571809 [debug] [ThreadPool]: Acquiring new postgres connection 'list_olist_db'
+[0m09:26:11.801068 [debug] [ThreadPool]: Using postgres connection "list_olist_db"
+[0m09:26:11.801068 [debug] [ThreadPool]: On list_olist_db: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "olist_dbt", "target_name": "dev", "connection_name": "list_olist_db"} */
+
+    select distinct nspname from pg_namespace
+  
+[0m09:26:11.802068 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m09:26:11.824625 [debug] [ThreadPool]: SQL status: SELECT 4 in 0.022 seconds
+[0m09:26:11.825626 [debug] [ThreadPool]: On list_olist_db: Close
+[0m09:26:11.828797 [debug] [ThreadPool]: Acquiring new postgres connection 'list_olist_db_public'
+[0m09:26:11.835192 [debug] [ThreadPool]: Using postgres connection "list_olist_db_public"
+[0m09:26:11.836192 [debug] [ThreadPool]: On list_olist_db_public: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "olist_dbt", "target_name": "dev", "connection_name": "list_olist_db_public"} */
+select
+      'olist_db' as database,
+      tablename as name,
+      schemaname as schema,
+      'table' as type
+    from pg_tables
+    where schemaname ilike 'public'
+    union all
+    select
+      'olist_db' as database,
+      viewname as name,
+      schemaname as schema,
+      'view' as type
+    from pg_views
+    where schemaname ilike 'public'
+    union all
+    select
+      'olist_db' as database,
+      matviewname as name,
+      schemaname as schema,
+      'materialized_view' as type
+    from pg_matviews
+    where schemaname ilike 'public'
+  
+[0m09:26:11.836192 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m09:26:11.884125 [debug] [ThreadPool]: SQL status: SELECT 9 in 0.048 seconds
+[0m09:26:11.886279 [debug] [ThreadPool]: On list_olist_db_public: ROLLBACK
+[0m09:26:11.887256 [debug] [ThreadPool]: On list_olist_db_public: Close
+[0m09:26:11.898088 [debug] [MainThread]: Using postgres connection "master"
+[0m09:26:11.898088 [debug] [MainThread]: On master: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "olist_dbt", "target_name": "dev", "connection_name": "master"} */
+select distinct
+        dependent_namespace.nspname as dependent_schema,
+        dependent_class.relname as dependent_name,
+        referenced_namespace.nspname as referenced_schema,
+        referenced_class.relname as referenced_name
+
+    -- Query for views: views are entries in pg_class with an entry in pg_rewrite, but we avoid
+    -- a seq scan on pg_rewrite by leveraging the fact there is an "internal" row in pg_depend for
+    -- the view...
+    from pg_class as dependent_class
+    join pg_namespace as dependent_namespace on dependent_namespace.oid = dependent_class.relnamespace
+    join pg_depend as dependent_depend on dependent_depend.refobjid = dependent_class.oid
+        and dependent_depend.classid = 'pg_rewrite'::regclass
+        and dependent_depend.refclassid = 'pg_class'::regclass
+        and dependent_depend.deptype = 'i'
+
+    -- ... and via pg_depend (that has a row per column, hence the need for "distinct" above, and
+    -- making sure to exclude the internal row to avoid a view appearing to depend on itself)...
+    join pg_depend as joining_depend on joining_depend.objid = dependent_depend.objid
+        and joining_depend.classid = 'pg_rewrite'::regclass
+        and joining_depend.refclassid = 'pg_class'::regclass
+        and joining_depend.refobjid != dependent_depend.refobjid
+
+    -- ... we can find the tables they query from in pg_class, but excluding system tables. Note we
+    -- don't need need to exclude _dependent_ system tables, because they only query from other
+    -- system tables, and so are automatically excluded by excluding _referenced_ system tables
+    join pg_class as referenced_class on referenced_class.oid = joining_depend.refobjid
+    join pg_namespace as referenced_namespace on referenced_namespace.oid = referenced_class.relnamespace
+        and referenced_namespace.nspname != 'information_schema'
+        and referenced_namespace.nspname not like 'pg\_%'
+
+    order by
+        dependent_schema, dependent_name, referenced_schema, referenced_name;
+[0m09:26:11.899088 [debug] [MainThread]: Opening a new connection, currently in state init
+[0m09:26:11.948825 [debug] [MainThread]: SQL status: SELECT 0 in 0.049 seconds
+[0m09:26:11.950825 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': 'b7eb7a4f-2f43-4ce3-b4eb-8e265b3c3a8b', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000019303E229C0>]}
+[0m09:26:11.950825 [debug] [MainThread]: On master: ROLLBACK
+[0m09:26:11.953569 [debug] [MainThread]: On master: COMMIT
+[0m09:26:11.953569 [debug] [MainThread]: Using postgres connection "master"
+[0m09:26:11.953569 [debug] [MainThread]: On master: COMMIT
+[0m09:26:11.958189 [debug] [MainThread]: SQL status: COMMIT in 0.003 seconds
+[0m09:26:11.958189 [debug] [MainThread]: On master: Close
+[0m09:26:12.008942 [debug] [Thread-1 (]: Began running node model.olist_dbt.stg_order_items
+[0m09:26:12.009907 [debug] [Thread-2 (]: Began running node model.olist_dbt.stg_orders
+[0m09:26:12.009907 [info ] [Thread-1 (]: 1 of 4 START sql view model public.stg_order_items ............................. [RUN]
+[0m09:26:12.011415 [debug] [Thread-1 (]: Acquiring new postgres connection 'model.olist_dbt.stg_order_items'
+[0m09:26:12.011415 [info ] [Thread-2 (]: 2 of 4 START sql view model public.stg_orders .................................. [RUN]
+[0m09:26:12.012460 [debug] [Thread-1 (]: Began compiling node model.olist_dbt.stg_order_items
+[0m09:26:12.013423 [debug] [Thread-2 (]: Acquiring new postgres connection 'model.olist_dbt.stg_orders'
+[0m09:26:12.020715 [debug] [Thread-1 (]: Writing injected SQL for node "model.olist_dbt.stg_order_items"
+[0m09:26:12.020715 [debug] [Thread-2 (]: Began compiling node model.olist_dbt.stg_orders
+[0m09:26:12.025242 [debug] [Thread-2 (]: Writing injected SQL for node "model.olist_dbt.stg_orders"
+[0m09:26:12.026241 [debug] [Thread-2 (]: Began executing node model.olist_dbt.stg_orders
+[0m09:26:12.047770 [debug] [Thread-1 (]: Began executing node model.olist_dbt.stg_order_items
+[0m09:26:12.090095 [debug] [Thread-2 (]: Writing runtime sql for node "model.olist_dbt.stg_orders"
+[0m09:26:12.091617 [debug] [Thread-1 (]: Writing runtime sql for node "model.olist_dbt.stg_order_items"
+[0m09:26:12.098451 [debug] [Thread-1 (]: Using postgres connection "model.olist_dbt.stg_order_items"
+[0m09:26:12.099447 [debug] [Thread-2 (]: Using postgres connection "model.olist_dbt.stg_orders"
+[0m09:26:12.099447 [debug] [Thread-1 (]: On model.olist_dbt.stg_order_items: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "olist_dbt", "target_name": "dev", "node_id": "model.olist_dbt.stg_order_items"} */
+
+  create view "olist_db"."public"."stg_order_items__dbt_tmp"
+    
+    
+  as (
+    select
+    order_id,
+    order_item_id,
+    product_id,
+    seller_id,
+    price,
+    freight_value
+from "olist_db"."public"."olist_order_items_dataset"
+  );
+[0m09:26:12.100481 [debug] [Thread-2 (]: On model.olist_dbt.stg_orders: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "olist_dbt", "target_name": "dev", "node_id": "model.olist_dbt.stg_orders"} */
+
+  create view "olist_db"."public"."stg_orders__dbt_tmp"
+    
+    
+  as (
+    select
+    order_id,
+    customer_id,
+    order_status,
+    cast(order_purchase_timestamp as timestamp) as order_purchase_timestamp,
+    cast(order_delivered_customer_date as timestamp) as order_delivered_customer_date,
+    cast(order_estimated_delivery_date as timestamp) as order_estimated_delivery_date
+from "olist_db"."public"."olist_orders_dataset"
+  );
+[0m09:26:12.101468 [debug] [Thread-1 (]: Opening a new connection, currently in state init
+[0m09:26:12.102700 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m09:26:12.137569 [debug] [Thread-2 (]: SQL status: CREATE VIEW in 0.035 seconds
+[0m09:26:12.138600 [debug] [Thread-1 (]: SQL status: CREATE VIEW in 0.037 seconds
+[0m09:26:12.147751 [debug] [Thread-2 (]: Using postgres connection "model.olist_dbt.stg_orders"
+[0m09:26:12.150849 [debug] [Thread-1 (]: Using postgres connection "model.olist_dbt.stg_order_items"
+[0m09:26:12.150849 [debug] [Thread-2 (]: On model.olist_dbt.stg_orders: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "olist_dbt", "target_name": "dev", "node_id": "model.olist_dbt.stg_orders"} */
+alter table "olist_db"."public"."stg_orders__dbt_tmp" rename to "stg_orders"
+[0m09:26:12.151742 [debug] [Thread-1 (]: On model.olist_dbt.stg_order_items: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "olist_dbt", "target_name": "dev", "node_id": "model.olist_dbt.stg_order_items"} */
+alter table "olist_db"."public"."stg_order_items__dbt_tmp" rename to "stg_order_items"
+[0m09:26:12.154259 [debug] [Thread-1 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m09:26:12.155271 [debug] [Thread-2 (]: SQL status: ALTER TABLE in 0.002 seconds
+[0m09:26:12.179239 [debug] [Thread-2 (]: On model.olist_dbt.stg_orders: COMMIT
+[0m09:26:12.180245 [debug] [Thread-1 (]: On model.olist_dbt.stg_order_items: COMMIT
+[0m09:26:12.181259 [debug] [Thread-2 (]: Using postgres connection "model.olist_dbt.stg_orders"
+[0m09:26:12.181259 [debug] [Thread-1 (]: Using postgres connection "model.olist_dbt.stg_order_items"
+[0m09:26:12.182272 [debug] [Thread-2 (]: On model.olist_dbt.stg_orders: COMMIT
+[0m09:26:12.182272 [debug] [Thread-1 (]: On model.olist_dbt.stg_order_items: COMMIT
+[0m09:26:12.189856 [debug] [Thread-1 (]: SQL status: COMMIT in 0.007 seconds
+[0m09:26:12.198596 [debug] [Thread-1 (]: Applying DROP to: "olist_db"."public"."stg_order_items__dbt_backup"
+[0m09:26:12.199569 [debug] [Thread-2 (]: SQL status: COMMIT in 0.016 seconds
+[0m09:26:12.206105 [debug] [Thread-1 (]: Using postgres connection "model.olist_dbt.stg_order_items"
+[0m09:26:12.210593 [debug] [Thread-2 (]: Applying DROP to: "olist_db"."public"."stg_orders__dbt_backup"
+[0m09:26:12.211215 [debug] [Thread-1 (]: On model.olist_dbt.stg_order_items: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "olist_dbt", "target_name": "dev", "node_id": "model.olist_dbt.stg_order_items"} */
+drop view if exists "olist_db"."public"."stg_order_items__dbt_backup" cascade
+[0m09:26:12.211725 [debug] [Thread-2 (]: Using postgres connection "model.olist_dbt.stg_orders"
+[0m09:26:12.212735 [debug] [Thread-2 (]: On model.olist_dbt.stg_orders: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "olist_dbt", "target_name": "dev", "node_id": "model.olist_dbt.stg_orders"} */
+drop view if exists "olist_db"."public"."stg_orders__dbt_backup" cascade
+[0m09:26:12.215126 [debug] [Thread-1 (]: SQL status: DROP VIEW in 0.003 seconds
+[0m09:26:12.215126 [debug] [Thread-2 (]: SQL status: DROP VIEW in 0.003 seconds
+[0m09:26:12.218158 [debug] [Thread-1 (]: On model.olist_dbt.stg_order_items: Close
+[0m09:26:12.220170 [debug] [Thread-2 (]: On model.olist_dbt.stg_orders: Close
+[0m09:26:12.228635 [debug] [Thread-1 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': 'b7eb7a4f-2f43-4ce3-b4eb-8e265b3c3a8b', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001937F1FF890>]}
+[0m09:26:12.229649 [debug] [Thread-2 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': 'b7eb7a4f-2f43-4ce3-b4eb-8e265b3c3a8b', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001930421EE40>]}
+[0m09:26:12.231655 [info ] [Thread-1 (]: 1 of 4 OK created sql view model public.stg_order_items ........................ [[32mCREATE VIEW[0m in 0.21s]
+[0m09:26:12.236885 [debug] [Thread-1 (]: Finished running node model.olist_dbt.stg_order_items
+[0m09:26:12.232642 [info ] [Thread-2 (]: 2 of 4 OK created sql view model public.stg_orders ............................. [[32mCREATE VIEW[0m in 0.21s]
+[0m09:26:12.239437 [debug] [Thread-2 (]: Finished running node model.olist_dbt.stg_orders
+[0m09:26:12.242429 [debug] [Thread-4 (]: Began running node model.olist_dbt.fct_deliveries
+[0m09:26:12.243987 [info ] [Thread-4 (]: 3 of 4 START sql table model public.fct_deliveries ............................. [RUN]
+[0m09:26:12.245994 [debug] [Thread-4 (]: Acquiring new postgres connection 'model.olist_dbt.fct_deliveries'
+[0m09:26:12.246998 [debug] [Thread-4 (]: Began compiling node model.olist_dbt.fct_deliveries
+[0m09:26:12.251747 [debug] [Thread-4 (]: Writing injected SQL for node "model.olist_dbt.fct_deliveries"
+[0m09:26:12.253888 [debug] [Thread-4 (]: Began executing node model.olist_dbt.fct_deliveries
+[0m09:26:12.275272 [debug] [Thread-4 (]: Writing runtime sql for node "model.olist_dbt.fct_deliveries"
+[0m09:26:12.279851 [debug] [Thread-4 (]: Using postgres connection "model.olist_dbt.fct_deliveries"
+[0m09:26:12.281023 [debug] [Thread-4 (]: On model.olist_dbt.fct_deliveries: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "olist_dbt", "target_name": "dev", "node_id": "model.olist_dbt.fct_deliveries"} */
+
+  
+    
+
+  create  table "olist_db"."public"."fct_deliveries__dbt_tmp"
+  
+  
+    as
+  
+  (
+    with orders as (
+    select * from "olist_db"."public"."stg_orders"
+),
+items as (
+    select * from "olist_db"."public"."stg_order_items"
+),
+customers as (
+    select * from "olist_db"."public"."olist_customers_dataset"
+),
+sellers as (
+    select * from "olist_db"."public"."olist_sellers_dataset"
+)
+
+select
+    o.order_id,
+    o.customer_id,
+    i.seller_id,
+    c.customer_state,
+    s.seller_state,
+    i.freight_value,
+    o.order_purchase_timestamp,
+    o.order_delivered_customer_date,
+    o.order_estimated_delivery_date,
+    
+    extract(epoch from (o.order_delivered_customer_date - o.order_purchase_timestamp)) / (24 * 3600) as delivery_time_days,
+    
+    extract(epoch from (o.order_delivered_customer_date - o.order_estimated_delivery_date)) / (24 * 3600) as estimated_error_days,
+    
+    case 
+        when extract(epoch from (o.order_delivered_customer_date - o.order_estimated_delivery_date)) > 0 then 1 
+        else 0 
+    end as is_late
+
+from orders o
+join items i on o.order_id = i.order_id
+join customers c on o.customer_id = c.customer_id
+join sellers s on i.seller_id = s.seller_id
+where o.order_status = 'delivered'
+  and o.order_delivered_customer_date is not null
+  );
+  
+[0m09:26:12.281719 [debug] [Thread-4 (]: Opening a new connection, currently in state init
+[0m09:26:12.850234 [debug] [Thread-4 (]: SQL status: SELECT 110189 in 0.568 seconds
+[0m09:26:12.857249 [debug] [Thread-4 (]: Using postgres connection "model.olist_dbt.fct_deliveries"
+[0m09:26:12.858248 [debug] [Thread-4 (]: On model.olist_dbt.fct_deliveries: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "olist_dbt", "target_name": "dev", "node_id": "model.olist_dbt.fct_deliveries"} */
+alter table "olist_db"."public"."fct_deliveries__dbt_tmp" rename to "fct_deliveries"
+[0m09:26:12.860014 [debug] [Thread-4 (]: SQL status: ALTER TABLE in 0.002 seconds
+[0m09:26:12.862756 [debug] [Thread-4 (]: On model.olist_dbt.fct_deliveries: COMMIT
+[0m09:26:12.862756 [debug] [Thread-4 (]: Using postgres connection "model.olist_dbt.fct_deliveries"
+[0m09:26:12.863671 [debug] [Thread-4 (]: On model.olist_dbt.fct_deliveries: COMMIT
+[0m09:26:12.901301 [debug] [Thread-4 (]: SQL status: COMMIT in 0.038 seconds
+[0m09:26:12.903804 [debug] [Thread-4 (]: Applying DROP to: "olist_db"."public"."fct_deliveries__dbt_backup"
+[0m09:26:12.908924 [debug] [Thread-4 (]: Using postgres connection "model.olist_dbt.fct_deliveries"
+[0m09:26:12.909934 [debug] [Thread-4 (]: On model.olist_dbt.fct_deliveries: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "olist_dbt", "target_name": "dev", "node_id": "model.olist_dbt.fct_deliveries"} */
+drop table if exists "olist_db"."public"."fct_deliveries__dbt_backup" cascade
+[0m09:26:12.911447 [debug] [Thread-4 (]: SQL status: DROP TABLE in 0.001 seconds
+[0m09:26:12.912557 [debug] [Thread-4 (]: On model.olist_dbt.fct_deliveries: Close
+[0m09:26:12.913454 [debug] [Thread-4 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': 'b7eb7a4f-2f43-4ce3-b4eb-8e265b3c3a8b', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000193043C9A00>]}
+[0m09:26:12.913454 [info ] [Thread-4 (]: 3 of 4 OK created sql table model public.fct_deliveries ........................ [[32mSELECT 110189[0m in 0.67s]
+[0m09:26:12.914457 [debug] [Thread-4 (]: Finished running node model.olist_dbt.fct_deliveries
+[0m09:26:12.915454 [debug] [Thread-1 (]: Began running node model.olist_dbt.gold_kpi_by_state
+[0m09:26:12.916462 [info ] [Thread-1 (]: 4 of 4 START sql table model public.gold_kpi_by_state .......................... [RUN]
+[0m09:26:12.916977 [debug] [Thread-1 (]: Re-using an available connection from the pool (formerly model.olist_dbt.stg_order_items, now model.olist_dbt.gold_kpi_by_state)
+[0m09:26:12.917986 [debug] [Thread-1 (]: Began compiling node model.olist_dbt.gold_kpi_by_state
+[0m09:26:12.920583 [debug] [Thread-1 (]: Writing injected SQL for node "model.olist_dbt.gold_kpi_by_state"
+[0m09:26:12.921554 [debug] [Thread-1 (]: Began executing node model.olist_dbt.gold_kpi_by_state
+[0m09:26:12.924662 [debug] [Thread-1 (]: Writing runtime sql for node "model.olist_dbt.gold_kpi_by_state"
+[0m09:26:12.925663 [debug] [Thread-1 (]: Using postgres connection "model.olist_dbt.gold_kpi_by_state"
+[0m09:26:12.926663 [debug] [Thread-1 (]: On model.olist_dbt.gold_kpi_by_state: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "olist_dbt", "target_name": "dev", "node_id": "model.olist_dbt.gold_kpi_by_state"} */
+
+  
+    
+
+  create  table "olist_db"."public"."gold_kpi_by_state__dbt_tmp"
+  
+  
+    as
+  
+  (
+    with fct as (
+    select * from "olist_db"."public"."fct_deliveries"
+)
+
+select
+    customer_state,
+    count(distinct order_id) as total_orders,
+    sum(is_late) as late_orders,
+    avg(delivery_time_days) as avg_delivery_time,
+    avg(freight_value) as avg_freight_value,
+    
+    case 
+        when count(distinct order_id) > 0 then 
+            ((count(distinct order_id) - sum(is_late))::numeric / count(distinct order_id)) * 100 
+        else 0 
+    end as ontime_delivery_rate
+
+from fct
+group by customer_state
+  );
+  
+[0m09:26:12.926663 [debug] [Thread-1 (]: Opening a new connection, currently in state closed
+[0m09:26:13.152558 [debug] [Thread-1 (]: SQL status: SELECT 27 in 0.226 seconds
+[0m09:26:13.156378 [debug] [Thread-1 (]: Using postgres connection "model.olist_dbt.gold_kpi_by_state"
+[0m09:26:13.156378 [debug] [Thread-1 (]: On model.olist_dbt.gold_kpi_by_state: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "olist_dbt", "target_name": "dev", "node_id": "model.olist_dbt.gold_kpi_by_state"} */
+alter table "olist_db"."public"."gold_kpi_by_state__dbt_tmp" rename to "gold_kpi_by_state"
+[0m09:26:13.158853 [debug] [Thread-1 (]: SQL status: ALTER TABLE in 0.002 seconds
+[0m09:26:13.160245 [debug] [Thread-1 (]: On model.olist_dbt.gold_kpi_by_state: COMMIT
+[0m09:26:13.160245 [debug] [Thread-1 (]: Using postgres connection "model.olist_dbt.gold_kpi_by_state"
+[0m09:26:13.160245 [debug] [Thread-1 (]: On model.olist_dbt.gold_kpi_by_state: COMMIT
+[0m09:26:13.167717 [debug] [Thread-1 (]: SQL status: COMMIT in 0.007 seconds
+[0m09:26:13.170244 [debug] [Thread-1 (]: Applying DROP to: "olist_db"."public"."gold_kpi_by_state__dbt_backup"
+[0m09:26:13.170244 [debug] [Thread-1 (]: Using postgres connection "model.olist_dbt.gold_kpi_by_state"
+[0m09:26:13.171245 [debug] [Thread-1 (]: On model.olist_dbt.gold_kpi_by_state: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "olist_dbt", "target_name": "dev", "node_id": "model.olist_dbt.gold_kpi_by_state"} */
+drop table if exists "olist_db"."public"."gold_kpi_by_state__dbt_backup" cascade
+[0m09:26:13.173759 [debug] [Thread-1 (]: SQL status: DROP TABLE in 0.002 seconds
+[0m09:26:13.174769 [debug] [Thread-1 (]: On model.olist_dbt.gold_kpi_by_state: Close
+[0m09:26:13.175483 [debug] [Thread-1 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': 'b7eb7a4f-2f43-4ce3-b4eb-8e265b3c3a8b', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000019303E18C50>]}
+[0m09:26:13.176493 [info ] [Thread-1 (]: 4 of 4 OK created sql table model public.gold_kpi_by_state ..................... [[32mSELECT 27[0m in 0.26s]
+[0m09:26:13.178021 [debug] [Thread-1 (]: Finished running node model.olist_dbt.gold_kpi_by_state
+[0m09:26:13.180575 [debug] [MainThread]: On master: COMMIT
+[0m09:26:13.180575 [debug] [MainThread]: Using postgres connection "master"
+[0m09:26:13.181690 [debug] [MainThread]: On master: COMMIT
+[0m09:26:13.181690 [debug] [MainThread]: Opening a new connection, currently in state closed
+[0m09:26:13.219888 [debug] [MainThread]: SQL status: COMMIT in 0.038 seconds
+[0m09:26:13.219888 [debug] [MainThread]: On master: Close
+[0m09:26:13.220909 [debug] [MainThread]: Connection 'master' was properly closed.
+[0m09:26:13.220909 [debug] [MainThread]: Connection 'list_olist_db' was properly closed.
+[0m09:26:13.220909 [debug] [MainThread]: Connection 'list_olist_db_public' was properly closed.
+[0m09:26:13.220909 [debug] [MainThread]: Connection 'model.olist_dbt.gold_kpi_by_state' was properly closed.
+[0m09:26:13.222318 [debug] [MainThread]: Connection 'model.olist_dbt.stg_orders' was properly closed.
+[0m09:26:13.222318 [debug] [MainThread]: Connection 'model.olist_dbt.fct_deliveries' was properly closed.
+[0m09:26:13.223000 [info ] [MainThread]: 
+[0m09:26:13.224115 [info ] [MainThread]: Finished running 2 table models, 2 view models in 0 hours 0 minutes and 6.65 seconds (6.65s).
+[0m09:26:13.226156 [debug] [MainThread]: Command end result
+[0m09:26:13.246556 [debug] [MainThread]: Wrote artifact WritableManifest to E:\Downloads\DA\Olist_Logistics_Project\olist_dbt\target\manifest.json
+[0m09:26:13.249557 [debug] [MainThread]: Wrote artifact SemanticManifest to E:\Downloads\DA\Olist_Logistics_Project\olist_dbt\target\semantic_manifest.json
+[0m09:26:13.256285 [debug] [MainThread]: Wrote artifact RunExecutionResult to E:\Downloads\DA\Olist_Logistics_Project\olist_dbt\target\run_results.json
+[0m09:26:13.256285 [info ] [MainThread]: 
+[0m09:26:13.257551 [info ] [MainThread]: [32mCompleted successfully[0m
+[0m09:26:13.258118 [info ] [MainThread]: 
+[0m09:26:13.259384 [info ] [MainThread]: Done. PASS=4 WARN=0 ERROR=0 SKIP=0 NO-OP=0 TOTAL=4
+[0m09:26:13.260612 [debug] [MainThread]: Command `dbt build` succeeded at 09:26:13.260612 after 11.89 seconds
+[0m09:26:13.260612 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000193022B5910>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000193023AD8E0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000019304283F50>]}
+[0m09:26:13.261205 [debug] [MainThread]: Flushing usage events
+[0m09:26:16.624346 [debug] [MainThread]: An error was encountered while trying to flush usage events

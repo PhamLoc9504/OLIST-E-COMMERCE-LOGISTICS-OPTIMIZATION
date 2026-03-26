@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: public
+    database: olist_db
+    schema: public
+    tables:
+      - name: olist_orders_dataset
+      - name: olist_order_items_dataset
+      - name: olist_customers_dataset
+      - name: olist_sellers_dataset
